@@ -55,6 +55,8 @@ Caso opte pela segunda opção, avaliaremos este critério também.
 
 Você tem total liberdade para fazer modificações na API, layouts, extrair imagens, adicionar conteúdo, utilizar plugins, inovar, ir além do que pedimos.
 
+Para o layout, utilizamos o [Gravit Designer](https://www.designer.io/download/), aplicativo gratuito. A pasta `assets/layouts` também contém o arquivo original caso deseje consultar, extrair imagens, ou até modificar.
+
 ## Critérios de Avaliação
 
 - Fidelidade às instruções e ao contexto.
