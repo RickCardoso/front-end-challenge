@@ -1,4 +1,4 @@
-# bouder-dashboard
+# boulder-dashboard
 
 ## Project setup
 ```
