@@ -1,3 +1,14 @@
-$primary: purple;
+$primary: #537780;
 
-$background-body: #2f8cc6;
+$textDark: #252525;
+$textLight: #fff;
+
+$background-body: #fff;
+$background-body-secondary: #55e9bc;
+
+
+.flex-centered {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
