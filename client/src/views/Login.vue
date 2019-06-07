@@ -4,50 +4,141 @@
       <img alt="Logo Boulder" src="../assets/images/logo_transparent.png" title="Boulder">
     </div>
     <div class="content">
-      <md-card class="content__login-form">
-        <md-card-header>
-          <span class="md-title">Login</span>
-        </md-card-header>
-        <md-card-content>
+      <form novalidate class="md-layout content__login-form" @submit.prevent="validateForm">
+        <md-card class="content__login-form__content">
+          <md-card-header>
+            <span class="md-title">Login</span>
+          </md-card-header>
+          <md-card-content>
 
-          <div class="md-layout md-gutter">
-            <div class="md-layout-item md-small-size-100">
-              <md-field>
-                <label for="mail">E-mail</label>
-                <md-input id="mail" name="mail" type="email"/>
-              </md-field>
+            <div class="md-layout md-layout-item md-gutter" v-if="unauthorized">
+              <span class="error-form">Credenciais de acesso incorretas.</span>
             </div>
-          </div>
-
-          <div class="md-layout md-gutter">
-            <div class="md-layout-item md-small-size-100">
-              <md-field>
-                <label for="mail">Senha</label>
-                <md-input id="password" name="password" type="password"/>
-              </md-field>
+            <div class="md-layout md-gutter">
+              <div class="md-layout-item md-small-size-100">
+                <md-field :class="validationClass('email')">
+                  <label for="email">E-mail</label>
+                  <md-input v-model="form.email" id="email" name="email" type="email" :disabled="loading"/>
+                  <span class="md-error" v-if="!$v.form.email.required">Insira seu e-mail de cadastro</span>
+                  <span class="md-error" v-else-if="!$v.form.email.email">Insira um e-mail válido</span>
+                </md-field>
+              </div>
             </div>
-          </div>
 
-        </md-card-content>
-        <md-card-actions>
-          <md-button>Entrar</md-button>
-        </md-card-actions>
-      </md-card>
+            <div class="md-layout md-gutter">
+              <div class="md-layout-item md-small-size-100">
+                <md-field :class="validationClass('password')">
+                  <label for="password">Senha</label>
+                  <md-input v-model="form.password" id="password" name="password" type="password" :disabled="loading"/>
+                  <span class="md-error" v-if="!$v.form.password.required">Insira sua senha</span>
+                  <span class="md-error" v-if="!$v.form.password.minLength">Insira no mínimo 4 caracteres</span>
+                </md-field>
+              </div>
+            </div>
+
+          </md-card-content>
+          <md-card-actions>
+            <md-button type="submit" class="md-primary" :disabled="loading">Entrar</md-button>
+          </md-card-actions>
+        </md-card>
+      </form>
     </div>
+
+    <md-snackbar
+      :md-duration="3000"
+      :md-active.sync="showLoginError"
+      md-position="center"
+      md-persistent>
+      <span>Não foi possível processar sua requisição.</span>
+    </md-snackbar>
   </div>
 </template>
 
 <script lang="ts">
   import { Component, Vue } from 'vue-property-decorator';
+  import { Action, Mutation, State } from 'vuex-class';
+  import { LoginActions } from '@/store/login/actions';
+  import { LoginMutation } from '@/store/login/mutations';
+  import { validationMixin } from 'vuelidate';
+  import { email, minLength, required } from 'vuelidate/lib/validators'
+  import { getValidationClass } from '@/core/helpers';
+  import auth from '@/core/auth';
+  import config from '@/core/config';
 
-  @Component({})
+  const namespace = 'login';
+
+  interface LoginForm {
+    email: string | null;
+    password: string | null;
+  }
+
+  const validations = {
+    form: {
+      email: {
+        required,
+        email
+      },
+      password: {
+        required,
+        minLength: minLength(4),
+      }
+    }
+  };
+  @Component({
+    mixins: [validationMixin],
+    validations: validations
+  })
   export default class Login extends Vue {
+    @State('error', {namespace})
+    public error!: boolean;
+    @State('unauthorized', {namespace})
+    public unauthorized!: boolean;
+    @State('loading', {namespace})
+    public loading!: boolean;
 
+    @Action('doLogin', {namespace})
+    public doLogin!: LoginActions['doLogin'];
+
+    @Mutation('loginError', {namespace})
+    public loginError!: LoginMutation['loginError'];
+
+    get showLoginError(): boolean {
+      return this.error;
+    }
+
+    set showLoginError(value: boolean) {
+      this.loginError({error: value})
+    }
+
+    public form: LoginForm = {
+      email: config.DEBUG ? 'john@gmail.com' : null,
+      password: config.DEBUG ? 'passwd' : null,
+    };
+
+    public validateForm() {
+      this.$v.$touch();
+      if (!this.$v.$invalid) {
+        this.sendLoginRequest();
+      }
+    }
+
+    public sendLoginRequest() {
+      if (this.form.email && this.form.password) {
+        this.doLogin({
+          email: this.form.email,
+          password: this.form.password,
+        });
+      }
+    }
+
+    public validationClass(fieldName: string) {
+      return getValidationClass(this.$v.form, fieldName);
+    }
   }
 </script>
 
 
-<style lang="scss">
+<style lang="scss" scoped>
   #login {
     background: $background-body-secondary;
     min-height: 100vh;
@@ -85,10 +176,18 @@
       min-height: 300px;
       max-width: 400px;
       max-height: 400px;
-      padding: 2rem 1rem;
+      /*padding: 2rem 1rem;*/
       text-align: center;
       margin-bottom: auto;
       margin-top: 20px;
+
+      &__content {
+        padding: 2rem 1rem;
+      }
     }
+  }
+
+  .error-form {
+    color: $text-error;
   }
 </style>

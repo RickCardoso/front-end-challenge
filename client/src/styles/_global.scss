@@ -3,3 +3,21 @@
   align-items: center;
   justify-content: center;
 }
+
+.w-100 {
+  min-width: 100%;
+}
+
+.w-90 {
+  min-width: 90%;
+}
+
+.w-80 {
+  min-width: 80%;
+}
+
+md-dialog {
+  form {
+    display: none;
+  }
+}

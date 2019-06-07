@@ -1,8 +1,9 @@
 @import "~vue-material/dist/theme/engine";
+@import "./variables";
 
 @include md-register-theme("default", (
-  primary: #537780,
-  accent: #55e9bc
+  primary: $primary,
+  accent: $accent,
 ));
 
 @import "~vue-material/dist/theme/all";
