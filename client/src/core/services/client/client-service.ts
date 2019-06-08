@@ -6,7 +6,7 @@ import {
   Client,
   ClientDetailResponse,
   ClientResponse,
-  ClientService,
+  ClientService, ClientTransactionsResponse,
   CreateClientServerParams, EditClientServerParams,
 } from '@/core/services/client/client-service.interface';
 
@@ -24,9 +24,13 @@ class ClientServiceImpl extends Service implements ClientService {
     return this.http.get<ClientDetailResponse>(`${config.API_URL}client/${params.id}`)
       .catch((e) => this.handleError(e));
   }
+  public async transactions(params: { id: number }): Promise<HttpResponse<ClientTransactionsResponse>> {
+    return this.http.get<ClientTransactionsResponse>(`${config.API_URL}client/${params.id}/transactions`)
+      .catch((e) => this.handleError(e));
+  }
 
   public async create(params: CreateClientServerParams): Promise<HttpResponse<void>> {
-    return this.http.get<void>(`${config.API_URL}client`, {
+    return this.http.post<void>(`${config.API_URL}client`, {
       params,
     }).catch((e) => this.handleError(e));
   }

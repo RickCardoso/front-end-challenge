@@ -34,3 +34,43 @@ export const DOCUMENT_TYPE_LIST: DocumentType[] = [
     description: 'Pessoa física',
   },
 ];
+
+export const TRANSACTION_STATUS_LIST = [
+  {
+    id: 1,
+    description: 'Autorizado',
+    color: 'green',
+    icon: 'check_circle_outline',
+  },
+  {
+    id: 2,
+    description: 'Cancelado',
+    color: 'gray',
+    icon: 'close',
+  },
+  {
+    id: 3,
+    description: 'Negado',
+    color: 'red',
+    icon: 'block',
+  },
+];
+
+export const BRAND_LIST = [
+  {
+    id: 1,
+    name: 'Mastercard',
+  },
+  {
+    id: 2,
+    name: 'VISA',
+  },
+  {
+    id: 3,
+    name: 'Elo',
+  },
+  {
+    id: 4,
+    name: 'American Express',
+  },
+];

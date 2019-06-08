@@ -2,6 +2,11 @@
   <div id="clientDetail">
     <AppToolbar></AppToolbar>
     <AppContainer :title="title" :loading="loadingDetail" @edit="openEdit()" :actions="['edit']">
+      <md-button class="md-accent" @click="goToTransaction()">
+        <md-icon>credit_card</md-icon>
+        TRANSACTIONAL
+      </md-button>
+
       <div class="md-layout app-container-detail" v-if="client">
         <div class="md-layout">
           <div class="md-layout-item md-size-3x md-gutter">
@@ -99,6 +104,7 @@
     get loadingDetail() {
       return this.clientState.detail.loading;
     }
+
     get loadingEdit() {
       return this.clientState.detail.loading;
     }
@@ -149,6 +155,10 @@
     set showDialog(value: boolean) {
       this.showEditModal({shown: value});
     };
+
+    goToTransaction() {
+      this.$router.push({name: 'client-transactions', params: {clientId: this.$route.params.clientId}})
+    }
 
   }
 </script>

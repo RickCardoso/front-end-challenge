@@ -1,9 +1,10 @@
 import Vue from 'vue';
+import auth from './core/auth';
 import Router from 'vue-router';
 import Login from '@/views/Login.vue';
 import Home from '@/views/Home.vue';
-import auth from './core/auth';
 import ClientDetail from '@/views/ClientDetail.vue';
+import Transactional from '@/views/Transactional.vue';
 
 Vue.use(Router);
 
@@ -25,6 +26,11 @@ const router = new Router({
       path: '/client-detail/:clientId',
       name: 'client-detail',
       component: ClientDetail,
+    },
+    {
+      path: '/client-transactions/:clientId',
+      name: 'client-transactions',
+      component: Transactional,
     },
     {path: '*', redirect: '/'},
   ],

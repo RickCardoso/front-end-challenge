@@ -4,6 +4,19 @@ export interface ClientResponse {
   clients: ClientListItem[];
 }
 
+export interface ClientTransaction {
+  id: number;
+  clientName: string;
+  clientId: number;
+  amount: number;
+  date: string;
+  statusId: number;
+  bin: string;
+  brandId: number;
+}
+
+export type ClientTransactionsResponse = ClientTransaction[];
+
 export interface ClientDetailResponse {
   client: Client;
 }

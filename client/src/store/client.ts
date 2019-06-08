@@ -4,8 +4,10 @@ import {
   Client,
   ClientDetailResponse,
   ClientListItem,
-  ClientResponse,
-  CreateClientServerParams, EditClientServerParams
+  ClientResponse, ClientTransaction,
+  ClientTransactionsResponse,
+  CreateClientServerParams,
+  EditClientServerParams
 } from '@/core/services/client/client-service.interface';
 import { RootState } from '@/store/types';
 import { logger } from '@/main';
@@ -32,6 +34,12 @@ export interface ClientState {
   };
   edit: {
     client: Client | null;
+    loading: boolean;
+    error: boolean;
+    success: boolean;
+  };
+  transactional: {
+    transactions: ClientTransaction[];
     loading: boolean;
     error: boolean;
     success: boolean;
@@ -79,6 +87,12 @@ export const initialState: ClientState = {
     error: false,
     success: false,
   },
+  transactional: {
+    transactions: [],
+    loading: false,
+    error: false,
+    success: false,
+  },
 };
 
 export interface ClientActions {
@@ -87,6 +101,8 @@ export interface ClientActions {
   loadClient(params: { id: number | string }): void;
 
   editClient(params: { id: number | string; data: EditClientParams }): void;
+
+  loadClientTransactions(data: { id: number | string }): void;
 
   loadClients: () => void;
 }
@@ -180,6 +196,18 @@ const store: Module<ClientState, RootState> = {
           dispatch('snack/setSnack', {message: 'Não foi processar a sua requisição no momento.'}, {root: true});
         });
     },
+    loadClientTransactions({commit, dispatch}, {id}) {
+      commit('startTransactionalRequest');
+      clientService.transactions({id})
+        .then((response) => {
+          commit('successTransactionalRequest', response.data);
+        })
+        .catch((e) => {
+          console.error(e);
+          commit('errorTransactionalRequest');
+          dispatch('snack/setSnack', {message: 'Não foi processar a sua requisição no momento.'}, {root: true});
+        });
+    },
   },
   mutations: {
     resetState(state: ClientState) {
@@ -254,6 +282,22 @@ const store: Module<ClientState, RootState> = {
       state.edit.loading = false;
     },
     // < / edit >
+    // < transactional >
+    startTransactionalRequest(state: ClientState) {
+      state.transactional.transactions = [];
+      state.transactional.error = false;
+      state.transactional.loading = true;
+    },
+    successTransactionalRequest(state: ClientState, payload: ClientTransactionsResponse) {
+      state.transactional.transactions = payload;
+      state.transactional.error = false;
+      state.transactional.loading = false;
+    },
+    errorTransactionalRequest(state: ClientState, payload: { error: boolean }) {
+      state.transactional.error = payload.error;
+      state.transactional.loading = false;
+    },
+    // < / transactional >
   },
 };
 
