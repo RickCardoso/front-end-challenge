@@ -26,6 +26,7 @@ export type Method =
 export interface HttpClient {
   post<T>(url: string, config?: HttpConfig): Promise<HttpResponse<T>>;
   get<T>(url: string, config?: HttpConfig): Promise<HttpResponse<T>>;
+  patch<T>(url: string, config?: HttpConfig): Promise<HttpResponse<T>>;
 
   convertError<T>(error: any): HttpError<T>;
 }

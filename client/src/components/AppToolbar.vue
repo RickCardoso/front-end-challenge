@@ -1,6 +1,6 @@
 <template>
   <md-toolbar class="md-accent" md-elevation="1">
-    <h3 class="md-title" style="flex: 1">Boulder</h3>
+    <router-link class="md-title" style="flex: 1" to="/">Boulder</router-link>
     <span class="md-title username">{{username}}</span>
     <md-button class="md-primary" @click.prevent="logout">Logout</md-button>
   </md-toolbar>

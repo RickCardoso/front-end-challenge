@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import { CLIENT_STATUS_LIST, DOCUMENT_TYPE_LIST } from '@/core/config/constants';
 
 export default () => {
   Vue.directive('clientStatus', {
@@ -6,32 +7,20 @@ export default () => {
       if (!binding.value) {
         return;
       }
-      let label: string;
-      let color: string;
-      switch (binding.value.toString()) {
-        case '1':
-          label = 'Aprovado';
-          color = 'green';
-          break;
-        case '2':
-          label = 'Bloqueado';
-          color = 'yellow';
-          break;
-        case '3':
-          label = 'Cancelado';
-          color = 'red';
-          break;
-        case '4':
-          label = 'Descredenciado';
-          color = 'gray';
-          break;
-        default:
-          label = 'Status desconhecido';
-          color = 'black';
-          break;
-      }
-      el.innerText = label;
-      el.style.color = color;
+      const item = CLIENT_STATUS_LIST.find((i) => i.id.toString() === binding.value.toString());
+      el.innerText = item ? item.description : 'Desconhecido';
+      el.style.color = item ? item.color : 'black';
     },
   });
+
+  Vue.directive('clientDocumentType', {
+    bind(el, binding, vnode) {
+      if (!binding.value) {
+        return;
+      }
+      const item = DOCUMENT_TYPE_LIST.find((i) => i.id.toString() === binding.value.toString());
+      el.innerText = item ? item.description : 'Desconhecido';
+    },
+  });
+
 };

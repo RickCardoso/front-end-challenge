@@ -1,16 +1,21 @@
 import { HttpResponse } from '@/core/http/http-client.interface';
 
 export interface ClientResponse {
-  clients: Client[];
+  clients: ClientListItem[];
 }
 
-export interface Client {
+export interface ClientDetailResponse {
+  client: Client;
+}
+
+export interface ClientListItem {
   id: number;
   name: string;
   status: number;
 }
 
-export interface CreateClientServerParams {
+export interface Client {
+  id?: number;
   name: string;
   address: string;
   neighborhood: string;
@@ -20,10 +25,16 @@ export interface CreateClientServerParams {
     type: number | string;
     number: string;
   };
-  partners: {
+  partners: Array<{
     name: string;
     document: string;
-  }[];
+  }>;
+}
+
+export interface CreateClientServerParams extends Client {
+}
+
+export interface EditClientServerParams extends Partial<Client> {
 }
 
 export interface ClientService {

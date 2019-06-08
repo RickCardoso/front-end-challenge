@@ -3,10 +3,14 @@
     <md-card class="card-container">
       <md-card-header class="container-header">
         <h3 class="md-title">{{title}}</h3>
-        <md-button @click="add()" class="md-icon-button md-accent md-raised">
+        <md-button @click="add()" v-if="!loading && hasAction('add')" class="md-icon-button md-accent md-raised">
           <md-icon>add</md-icon>
         </md-button>
+        <md-button @click="edit()" v-if="!loading && hasAction('edit')" class="md-icon-button md-accent md-raised">
+          <md-icon>edit</md-icon>
+        </md-button>
       </md-card-header>
+      <md-progress-bar v-if="loading" class="md-accent" md-mode="indeterminate"></md-progress-bar>
       <slot/>
     </md-card>
   </div>
@@ -20,8 +24,18 @@
   })
   export default class AppContainer extends Vue {
     @Prop(String) title: string | undefined;
+    @Prop(Boolean) loading: boolean | undefined;
+    @Prop(Array) actions: string[] | undefined;
+
+    hasAction(action: string) {
+      return this.actions && this.actions.indexOf(action) !== -1;
+    }
 
     @Emit() add(e: MouseEvent) {
+      return e;
+    };
+
+    @Emit() edit(e: MouseEvent) {
       return e;
     };
   }

@@ -14,6 +14,7 @@ import {
   MdTabs,
   MdMenu,
   MdList,
+  MdProgress,
 // @ts-ignore: there's no vue-material typescript types yet: https://github.com/vuematerial/vue-material/issues/662.
 } from 'vue-material/dist/components';
 
@@ -33,4 +34,5 @@ export default () => {
   Vue.use(MdTabs);
   Vue.use(MdMenu);
   Vue.use(MdList);
+  Vue.use(MdProgress);
 };

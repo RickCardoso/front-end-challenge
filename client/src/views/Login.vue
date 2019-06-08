@@ -43,14 +43,6 @@
         </md-card>
       </form>
     </div>
-
-    <md-snackbar
-      :md-duration="3000"
-      :md-active.sync="showLoginError"
-      md-position="center"
-      md-persistent>
-      <span>Não foi possível processar sua requisição.</span>
-    </md-snackbar>
   </div>
 </template>
 
@@ -62,7 +54,6 @@
   import { validationMixin } from 'vuelidate';
   import { email, minLength, required } from 'vuelidate/lib/validators'
   import { getValidationClass } from '@/core/helpers';
-  import auth from '@/core/auth';
   import config from '@/core/config';
 
   const namespace = 'login';
@@ -98,17 +89,6 @@
 
     @Action('doLogin', {namespace})
     public doLogin!: LoginActions['doLogin'];
-
-    @Mutation('loginError', {namespace})
-    public loginError!: LoginMutation['loginError'];
-
-    get showLoginError(): boolean {
-      return this.error;
-    }
-
-    set showLoginError(value: boolean) {
-      this.loginError({error: value})
-    }
 
     public form: LoginForm = {
       email: config.DEBUG ? 'john@gmail.com' : null,
@@ -176,7 +156,6 @@
       min-height: 300px;
       max-width: 400px;
       max-height: 400px;
-      /*padding: 2rem 1rem;*/
       text-align: center;
       margin-bottom: auto;
       margin-top: 20px;

@@ -16,8 +16,42 @@
   min-width: 80%;
 }
 
-md-dialog {
-  form {
-    display: none;
+.app-container-detail {
+  flex-direction: column;
+
+  > .md-layout {
+    padding: 1rem 2rem;
+
+    > .md-layout-item {
+
+    }
   }
+
+  &__label {
+    display: block;
+    font-weight: bold;
+    color: $primary;
+  }
+
+  &__value {
+    font-size: 1rem;
+    margin-top: 4px;
+    display: inline-block;
+  }
+
+  .md-title{
+    margin-bottom: 1rem;
+  }
+}
+
+hr {
+  border-bottom: 1px solid #ccc;
+  width: 95%;
+  height: 1px;
+  opacity: 0.2;
+  margin: 1.2rem auto;
+}
+
+.flex-c{
+  flex-direction: column;
 }

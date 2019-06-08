@@ -33,6 +33,12 @@ export class HttpClientAxiosImpl implements HttpClient {
       .then((resp) => axiosResponseTransformer<T>(resp));
   }
 
+  public async patch<T>(url: string, config?: HttpConfig): Promise<HttpResponse<T>> {
+    const data = config && config.params;
+    return axios.patch(url, data, axiosConfigTransformer('patch', config))
+      .then((resp) => axiosResponseTransformer<T>(resp));
+  }
+
   public get<T>(url: string, config?: HttpConfig): Promise<HttpResponse<T>> {
     const data = config && config.params;
     return axios.get(url, axiosConfigTransformer('get', config))

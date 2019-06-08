@@ -19,7 +19,7 @@ export const actions: ActionTree<LoginState, RootState> = {
     commit('resetState', null, {root: true});
     router.push('/login');
   },
-  doLogin({commit}, {email, password}): void {
+  doLogin({commit, dispatch}, {email, password}): void {
     commit('loginStartRequest');
     loginService.login({
       email,
@@ -38,6 +38,7 @@ export const actions: ActionTree<LoginState, RootState> = {
         commit('loginUnauthorized', {unauthorized: true});
       } else {
         commit('loginError', {error: true});
+        dispatch('snack/setSnack', {message: 'Ocorreu um erro. Tente novamente mais tarde.'}, {root: true});
       }
     });
   },

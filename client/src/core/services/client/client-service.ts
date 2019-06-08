@@ -3,9 +3,11 @@ import config from '@/core/config';
 import { Service } from '@/core/services/services.interface';
 import { HttpClient, HttpResponse } from '@/core/http/http-client.interface';
 import {
+  Client,
+  ClientDetailResponse,
   ClientResponse,
   ClientService,
-  CreateClientServerParams,
+  CreateClientServerParams, EditClientServerParams,
 } from '@/core/services/client/client-service.interface';
 
 class ClientServiceImpl extends Service implements ClientService {
@@ -18,8 +20,19 @@ class ClientServiceImpl extends Service implements ClientService {
       .catch((e) => this.handleError(e));
   }
 
-  public async create(params: CreateClientServerParams): Promise<HttpResponse<ClientResponse>> {
-    return this.http.post<ClientResponse>(`${config.API_URL}client`, {
+  public async detail(params: { id: number }): Promise<HttpResponse<ClientDetailResponse>> {
+    return this.http.get<ClientDetailResponse>(`${config.API_URL}client/${params.id}`)
+      .catch((e) => this.handleError(e));
+  }
+
+  public async create(params: CreateClientServerParams): Promise<HttpResponse<void>> {
+    return this.http.get<void>(`${config.API_URL}client`, {
+      params,
+    }).catch((e) => this.handleError(e));
+  }
+
+  public async edit(id: number, params: EditClientServerParams): Promise<HttpResponse<void>> {
+    return this.http.patch<void>(`${config.API_URL}client/${id}`, {
       params,
     }).catch((e) => this.handleError(e));
   }

@@ -1,9 +1,9 @@
 <template>
   <div id="home">
     <AppToolbar></AppToolbar>
-    <AppContainer title="Clientes" @add="openAdd()">
+    <AppContainer title="Clientes" :loading="clientState.loading" @add="openAdd()" :actions="['add']">
       <md-table>
-        <md-table-row v-for="item in clientState.clients">
+        <md-table-row v-for="item in clientState.clients" @click="goToEdit(item)">
           <md-table-cell md-numeric>{{item.id}}</md-table-cell>
           <md-table-cell>{{item.name}}</md-table-cell>
           <md-table-cell>
@@ -122,27 +122,11 @@
         </md-button>
       </md-dialog-actions>
     </md-dialog>
-
-    <md-snackbar
-      :md-duration="3000"
-      :md-active.sync="showRequestError"
-      md-position="center"
-      md-persistent>
-      <span>Não foi possível processar sua requisição.</span>
-    </md-snackbar>
-    <md-snackbar
-      :md-duration="3000"
-      :md-active.sync="showCreateError"
-      md-position="center"
-      md-persistent>
-      <span>Não foi possível criar o cliente no momento.</span>
-    </md-snackbar>
   </div>
 </template>
 
 <script lang="ts">
   import { Component, Vue } from 'vue-property-decorator';
-  import auth, { User } from '@/core/auth';
   import AppToolbar from '@/components/AppToolbar.vue';
   import AppContainer from '@/components/AppContainer.vue';
   import { Action, Mutation, State } from 'vuex-class';
@@ -151,6 +135,8 @@
   import { required } from 'vuelidate/lib/validators';
   import { CLIENT_STATUS_LIST, DOCUMENT_TYPE_LIST } from '@/core/config/constants';
   import { ClientActions, ClientState, CreateClientParams } from '@/store/client';
+  import { ClientListItem } from '@/core/services/client/client-service.interface';
+  import router from '@/router';
 
   interface Form extends CreateClientParams {
   }
@@ -189,7 +175,7 @@
     validations: validations
   })
   export default class Home extends Vue {
-    user: User | null = auth.getUSer();
+
     @State('client')
     public clientState!: ClientState;
     @Action('loadClients', {namespace: 'client'})
@@ -198,8 +184,6 @@
     public createClient!: ClientActions['createClient'];
 
     @Mutation('showModal', {namespace: 'client'}) showModal: any;
-    @Mutation('clientsError', {namespace: 'client'}) clientsError: any;
-    @Mutation('errorCreate', {namespace: 'client'}) errorCreate: any;
 
     get showDialog() {
       return this.clientState.create.showModal;
@@ -208,22 +192,6 @@
     set showDialog(value: boolean) {
       this.showModal({shown: value});
     };
-
-    get showCreateError(): boolean {
-      return this.clientState.create.error;
-    }
-
-    set showCreateError(value: boolean) {
-      this.errorCreate({error: value})
-    }
-
-    get showRequestError(): boolean {
-      return this.clientState.error;
-    }
-
-    set showRequestError(value: boolean) {
-      this.clientsError({error: value})
-    }
 
     documentTypeOptions = DOCUMENT_TYPE_LIST;
     statusOptions = CLIENT_STATUS_LIST;
@@ -264,6 +232,10 @@
 
     public validationClass(fieldName: string) {
       return getValidationClass(this.$v.form, fieldName);
+    }
+
+    public goToEdit(client: ClientListItem) {
+      router.push({name: 'client-detail', params: {'clientId': client.id.toString()}});
     }
   }
 </script>
