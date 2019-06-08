@@ -24,7 +24,6 @@ function isAuthenticated() {
   try {
     return !!getUser();
   } catch (e) {
-    console.error(e);
     return false;
   }
 }

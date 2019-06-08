@@ -78,8 +78,7 @@
   import { ClientActions, ClientState, EditClientParams } from '@/store/client';
   import ClientEdit from '@/components/ClientEdit.vue';
 
-  interface Form extends EditClientParams {
-  }
+  type Form = EditClientParams;
 
   @Component({
     components: {AppContainer, AppToolbar, ClientEdit},
@@ -95,7 +94,8 @@
     @Action('editClient', {namespace: 'client'})
     public editClient!: ClientActions['editClient'];
 
-    @Mutation('showEditModal', {namespace: 'client'}) showEditModal: any;
+    @Mutation('showEditModal', {namespace: 'client'})
+    public showEditModal: any;
 
     get client() {
       return this.clientState.detail.client;
@@ -113,18 +113,18 @@
       return this.client && this.client.name;
     }
 
-    form: Form = {
+    public form: Form = {
       address: '',
       neighborhood: '',
       city: '',
       status: '',
     };
 
-    mounted() {
+    public mounted() {
       this.loadClient({id: this.$route.params.clientId});
     }
 
-    openEdit() {
+    public openEdit() {
       if (this.client) {
         this.form = {
           address: this.client.address,
@@ -136,12 +136,12 @@
       this.showDialog = true;
     }
 
-    successSubmit() {
+    public successSubmit() {
       this.sendRequest();
     }
 
-    onCloseModal() {
-      this.showDialog = false
+    public onCloseModal() {
+      this.showDialog = false;
     }
 
     public sendRequest() {
@@ -150,14 +150,14 @@
 
     get showDialog() {
       return this.clientState.detail.showModal;
-    };
+    }
 
     set showDialog(value: boolean) {
       this.showEditModal({shown: value});
-    };
+    }
 
-    goToTransaction() {
-      this.$router.push({name: 'client-transactions', params: {clientId: this.$route.params.clientId}})
+    public goToTransaction() {
+      this.$router.push({name: 'client-transactions', params: {clientId: this.$route.params.clientId}});
     }
 
   }

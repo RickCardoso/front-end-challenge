@@ -19,10 +19,10 @@ const store: Module<SnackState, RootState> = {
   actions: {
     setSnack({commit}, {message, duration}) {
       commit('setSnack', {message});
-      const _duration = typeof duration === 'undefined' ? 3000 : duration;
+      const snackDuration = typeof duration === 'undefined' ? 3000 : duration;
       setTimeout(() => {
         commit('resetState');
-      }, _duration);
+      }, snackDuration);
     },
   },
   mutations: {

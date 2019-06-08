@@ -13,7 +13,7 @@
   import auth, { User } from '@/core/auth';
 
   @Component({
-    name: 'app-toolbar'
+    name: 'app-toolbar',
   })
   export default class AppToolbar extends Vue {
     user: User | null = auth.getUSer();

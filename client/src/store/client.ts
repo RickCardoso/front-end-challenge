@@ -7,7 +7,7 @@ import {
   ClientResponse, ClientTransaction,
   ClientTransactionsResponse,
   CreateClientServerParams,
-  EditClientServerParams
+  EditClientServerParams,
 } from '@/core/services/client/client-service.interface';
 import { RootState } from '@/store/types';
 import { logger } from '@/main';
@@ -96,6 +96,8 @@ export const initialState: ClientState = {
 };
 
 export interface ClientActions {
+  loadClients: () => void;
+
   createClient(params: CreateClientParams): void;
 
   loadClient(params: { id: number | string }): void;
@@ -104,7 +106,6 @@ export interface ClientActions {
 
   loadClientTransactions(data: { id: number | string }): void;
 
-  loadClients: () => void;
 }
 
 function mapCreateParams(original: CreateClientParams): CreateClientServerParams {
@@ -164,8 +165,7 @@ const store: Module<ClientState, RootState> = {
           commit('successCreate');
           commit('showModal', {shown: false});
         })
-        .catch((e) => {
-          console.error(e);
+        .catch(() => {
           commit('errorCreate', {error: true});
           dispatch('snack/setSnack', {message: 'Não foi possível criar o cliente no momento.'}, {root: true});
         });
@@ -174,12 +174,11 @@ const store: Module<ClientState, RootState> = {
       commit('startEditRequest');
       clientService.edit(params.id, mapEditParams(params.data))
         .then(() => {
-          dispatch('loadClient', {id: params.id})
+          dispatch('loadClient', {id: params.id});
           commit('successEdit');
           commit('showEditModal', {shown: false});
         })
         .catch((e) => {
-          console.error(e);
           commit('errorEdit', {error: e});
           dispatch('snack/setSnack', {message: 'Não foi processar a sua requisição no momento.'}, {root: true});
         });
@@ -190,8 +189,7 @@ const store: Module<ClientState, RootState> = {
         .then((response) => {
           commit('successDetailRequest', response.data);
         })
-        .catch((e) => {
-          console.error(e);
+        .catch(() => {
           commit('errorDetailRequest');
           dispatch('snack/setSnack', {message: 'Não foi processar a sua requisição no momento.'}, {root: true});
         });
@@ -202,8 +200,7 @@ const store: Module<ClientState, RootState> = {
         .then((response) => {
           commit('successTransactionalRequest', response.data);
         })
-        .catch((e) => {
-          console.error(e);
+        .catch(() => {
           commit('errorTransactionalRequest');
           dispatch('snack/setSnack', {message: 'Não foi processar a sua requisição no momento.'}, {root: true});
         });

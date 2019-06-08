@@ -44,7 +44,7 @@
                 <md-field :class="validationClass('status')">
                   <label for="status">Status</label>
                   <md-select v-model="form.status" name="status" id="status" :disabled="loading">
-                    <md-option :value="opt.id" v-for="opt of statusOptions">{{opt.description}}</md-option>
+                    <md-option :value="opt.id" v-bind:key="opt.id" v-for="opt of statusOptions">{{opt.description}}</md-option>
                   </md-select>
                 </md-field>
               </div>
@@ -72,29 +72,28 @@
   import { CLIENT_STATUS_LIST, DOCUMENT_TYPE_LIST } from '@/core/config/constants';
   import { EditClientParams } from '@/store/client';
 
-  interface Form extends EditClientParams {
-  }
+  type Form = EditClientParams;
 
   const validations = {
     form: {
       address: {
-        required
+        required,
       },
       neighborhood: {
-        required
+        required,
       },
       city: {
-        required
+        required,
       },
       status: {
-        required
+        required,
       },
-    }
+    },
   };
   @Component({
     components: {},
     mixins: [validationMixin],
-    validations: validations
+    validations,
   })
   export default class ClientEdit extends Vue {
 

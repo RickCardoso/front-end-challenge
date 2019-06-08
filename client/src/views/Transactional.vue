@@ -47,11 +47,11 @@
       return this.clientState && this.clientState.transactional && this.clientState.transactional.transactions;
     }
 
-    mounted() {
+    public mounted() {
       this.loadData();
     }
 
-    loadData() {
+    public loadData() {
       this.loadClientTransactions({id: this.$route.params.clientId});
     }
   }

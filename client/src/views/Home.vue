@@ -138,41 +138,40 @@
   import { ClientListItem } from '@/core/services/client/client-service.interface';
   import router from '@/router';
 
-  interface Form extends CreateClientParams {
-  }
+  type Form = CreateClientParams;
 
   const validations = {
     form: {
       name: {
-        required
+        required,
       },
       documentType: {
-        required
+        required,
       },
       documentNumber: {
-        required
+        required,
       },
       neighborhood: {
-        required
+        required,
       },
       city: {
-        required
+        required,
       },
       status: {
-        required
+        required,
       },
       partnerName: {
-        required
+        required,
       },
       partnerDocument: {
-        required
+        required,
       },
-    }
+    },
   };
   @Component({
     components: {AppContainer, AppToolbar},
     mixins: [validationMixin],
-    validations: validations
+    validations,
   })
   export default class Home extends Vue {
 
@@ -183,24 +182,25 @@
     @Action('createClient', {namespace: 'client'})
     public createClient!: ClientActions['createClient'];
 
-    @Mutation('showModal', {namespace: 'client'}) showModal: any;
+    @Mutation('showModal', {namespace: 'client'})
+    public showModal: any;
 
     get showDialog() {
       return this.clientState.create.showModal;
-    };
+    }
 
     set showDialog(value: boolean) {
       this.showModal({shown: value});
-    };
+    }
 
-    documentTypeOptions = DOCUMENT_TYPE_LIST;
-    statusOptions = CLIENT_STATUS_LIST;
+    public documentTypeOptions = DOCUMENT_TYPE_LIST;
+    public statusOptions = CLIENT_STATUS_LIST;
 
     get loading() {
       return this.clientState.loading;
     }
 
-    form: Form = {
+    public form: Form = {
       name: '',
       documentType: '',
       documentNumber: '',
@@ -211,15 +211,15 @@
       partnerDocument: '',
     };
 
-    mounted() {
+    public mounted() {
       this.loadClients();
     }
 
-    openAdd() {
+    public openAdd() {
       this.showDialog = true;
     }
 
-    validateForm() {
+    public validateForm() {
       this.$v.$touch();
       if (!this.$v.$invalid) {
         this.sendRequest();
@@ -235,7 +235,7 @@
     }
 
     public goToEdit(client: ClientListItem) {
-      router.push({name: 'client-detail', params: {'clientId': client.id.toString()}});
+      router.push({name: 'client-detail', params: {clientId: client.id.toString()}});
     }
   }
 </script>

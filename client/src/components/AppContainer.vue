@@ -20,7 +20,7 @@
   import { Component, Emit, Prop, Vue } from 'vue-property-decorator';
 
   @Component({
-    name: 'app-container'
+    name: 'app-container',
   })
   export default class AppContainer extends Vue {
     @Prop(String) title: string | undefined;
@@ -33,11 +33,11 @@
 
     @Emit() add(e: MouseEvent) {
       return e;
-    };
+    }
 
     @Emit() edit(e: MouseEvent) {
       return e;
-    };
+    }
   }
 </script>
 

@@ -48,11 +48,10 @@
 
 <script lang="ts">
   import { Component, Vue } from 'vue-property-decorator';
-  import { Action, Mutation, State } from 'vuex-class';
+  import { Action, State } from 'vuex-class';
   import { LoginActions } from '@/store/login/actions';
-  import { LoginMutation } from '@/store/login/mutations';
   import { validationMixin } from 'vuelidate';
-  import { email, minLength, required } from 'vuelidate/lib/validators'
+  import { email, minLength, required } from 'vuelidate/lib/validators';
   import { getValidationClass } from '@/core/helpers';
   import config from '@/core/config';
 
@@ -67,17 +66,17 @@
     form: {
       email: {
         required,
-        email
+        email,
       },
       password: {
         required,
         minLength: minLength(4),
-      }
-    }
+      },
+    },
   };
   @Component({
     mixins: [validationMixin],
-    validations: validations
+    validations,
   })
   export default class Login extends Vue {
     @State('error', {namespace})
